@@ -22,12 +22,19 @@ int get_colunas() {
 }
 
 bool verificar_indices(int linhas) {
-    if (linhas == 0) {
-        cout << "\nErro de operação -> Linhas e colunas não foram definidas" << endl;
+    setlocale(LC_ALL, "pt-BR.UTF8");
+    try {
+        if (linhas != 0 && linhas > 0) {
+            return true;
+        } else {
+            throw (linhas);
+        }
+    }
+    catch (...) {
+        cout << "\nErro de operação -> Índices não foram definidos!" << endl;
         this_thread::sleep_for(chrono::seconds(2));
         return false;
     }
-    return true;
 }
 
 float get_real() {
@@ -39,14 +46,21 @@ float get_real() {
 
 bool verificar_real(float real) {
     setlocale(LC_ALL, "pt-BR.UTF8");
-    if (real == 0)
-        cout << "\nErro de operação -> Real não foi definido" << endl;
+    try {
+        if (real != 0 && real > 0) {
+            return true;
+        } else {
+            throw (real);
+        }
+    }
+    catch (...) {
+        cout << "\nErro de operação -> Nº real não foi definido!" << endl;
         this_thread::sleep_for(chrono::seconds(2));
         return false;
-    return true;
+    }
 }
 
-void operacoes_reais(int linhas, int colunas) {
+void menu_operacoes_reais(int linhas, int colunas) {
     int tecla = 0;
     float real = 0;
     Matriz matriz(linhas, colunas);
@@ -67,43 +81,54 @@ void operacoes_reais(int linhas, int colunas) {
                 real = get_real();
                 break;
             case 2:
-                if (verificar_real(real) == false)
-                    break;
-                matriz.set_auto();
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
-                matriz.somar_real(real);
-                this_thread::sleep_for(chrono::seconds(2));
-                matriz.mostra_matriz();
+                if (verificar_real(real)) {
+                    matriz.set_auto();
+                    cout << "Matriz A:" << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz.somar_real(real);
+                    this_thread::sleep_for(chrono::seconds(2));
+                    cout << real << " + Matriz A: " << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                }
                 break;
             case 3:
-                if (verificar_real(real) == false)
-                    break;
-                matriz.set_auto();
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
-                matriz.subtrair_real(real);
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
+                if (verificar_real(real)) {
+                    matriz.set_auto();
+                    cout << "Matriz A:" << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz.subtrair_real(real);
+                    cout << real << " - Matriz A: " << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                }
                 break;
             case 4:
-                if (verificar_real(real) == false)
-                    break;
-                matriz.set_auto();
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
-                matriz.multiplicar_real(real);
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
+                if (verificar_real(real)) {
+                    matriz.set_auto();
+                    cout << "Matriz A:" << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz.multiplicar_real(real);
+                    cout << real << " * Matriz A: " << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                }
+                break;
             case 5:
-                if (verificar_real(real) == false)
-                    break;
-                matriz.set_auto();
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
-                matriz.dividir_real(real);
-                matriz.mostra_matriz();
-                this_thread::sleep_for(chrono::seconds(2));
+                if (verificar_real(real)) {
+                    matriz.set_auto();
+                    cout << "Matriz A:" << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz.dividir_real(real);
+                    cout << real << " / Matriz A: " << endl;
+                    matriz.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                }
+                break;
             case 6:
                 main();
                 break;
@@ -134,9 +159,9 @@ int main()
                 colunas = get_colunas();
                 break;
             case 2:
-                if (verificar_indices(linhas) == false)
-                    break;
-                operacoes_reais(linhas, colunas);
+                if (verificar_indices(linhas)) {
+                    menu_operacoes_reais(linhas, colunas);
+                }
                 break;
             case 3:
                 exit(0); 

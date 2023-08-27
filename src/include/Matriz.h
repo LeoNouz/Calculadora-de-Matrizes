@@ -16,11 +16,15 @@ class Matriz {
 
         void mostra_matriz() const;
 
-        bool verificar_indice(const Matriz& matriz) const;
-        void somar_real(const float numero) const;
-        void subtrair_real(const float numero) const;
-        void multiplicar_real(const float numero) const;
-        void dividir_real(const float numero) const;
+        bool verificar_indices(const Matriz& matriz) const;
+        void somar(const float numero) const;
+        void somar(const Matriz& matriz) const;
+        void subtrair(const float numero) const;
+        void subtrair(const Matriz& matriz) const;
+        void multiplicar(const float numero) const;
+        void multiplicar(const Matriz& matriz) const;
+        void dividir(const float numero) const;
+        void dividir(const Matriz& matriz) const;
     private:
         int m_linhas, m_colunas;
         int** m_matriz;

@@ -1,10 +1,12 @@
 #include <iostream>
 using namespace std;
 
-bool Matriz::verificar_indices(const Matriz& matriz) const {
+int Matriz::verificar_indices(const Matriz& matriz, int aux = 0) const {
     try {
         if (m_linhas == matriz.get_linhas() && m_colunas == matriz.get_colunas())
-            return true;
+            return 1;
+        else if (m_colunas == matriz.get_linhas() && aux == 1)
+            return 2;
         else
             throw (m_linhas, m_colunas);
     }
@@ -12,7 +14,7 @@ bool Matriz::verificar_indices(const Matriz& matriz) const {
         cout << "\nErro de operação -> Os índices das matrizes devem ser [" << m_linhas << "]";
         cout << "[" << m_colunas << "]" << endl;
         this_thread::sleep_for(chrono::seconds(2));
-        return false;
+        return 0;
     }
 }
 
@@ -57,11 +59,21 @@ void Matriz::multiplicar(const float numero) const {
 }
 
 void Matriz::multiplicar(const Matriz& matriz) const {
-    for (int i = 0; i < m_linhas; i++) {
-        for (int j = 0; j < m_colunas; j++) {
-            m_matriz[i][j] *= matriz.get_matriz()[i][j];
+    for (int i = 0; i < m_linhas; ++i) {
+        for (int j = 0; j < m_colunas; ++j) {
+            m_matriz[i][j] *= matriz.get_matriz()[j][i];
         }
     }
+}
+
+Matriz Matriz::multiplicar(const Matriz& matriz, int aux) const {
+    Matriz nova_matriz(m_linhas, matriz.get_colunas());
+    for (int i = 0; i < m_linhas; ++i) {
+        for (int j = 0; j < m_colunas; ++j) {
+            nova_matriz.get_matriz()[i][j] = m_matriz[i][j] * matriz.get_matriz()[j][i];
+        }
+    }
+    return nova_matriz;
 }
 
 void Matriz::dividir(const float numero) const {
@@ -73,9 +85,19 @@ void Matriz::dividir(const float numero) const {
 }
 
 void Matriz::dividir(const Matriz& matriz) const {
-    for (int i = 0; i < m_linhas; i++) {
-        for (int j = 0; j < m_colunas; j++) {
-            m_matriz[i][j] /= matriz.get_matriz()[i][j];
+    for (int i = 0; i < m_linhas; ++i) {
+        for (int j = 0; j < m_colunas; ++j) {
+            m_matriz[i][j] /= matriz.get_matriz()[j][i];
         }
     }
+}
+
+Matriz Matriz::dividir(const Matriz& matriz, int aux) const {
+    Matriz nova_matriz(m_linhas, matriz.get_colunas());
+    for (int i = 0; i < m_linhas; ++i) {
+        for (int j = 0; j < m_colunas; ++j) {
+            nova_matriz.get_matriz()[i][j] = m_matriz[i][j] / matriz.get_matriz()[j][i];
+        }
+    }
+    return nova_matriz;
 }

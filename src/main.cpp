@@ -21,13 +21,13 @@ int get_colunas() {
     return colunas;
 }
 
-bool verificar_indices(int linhas) {
+bool verificar_indices(int linhas1, int colunas1, int linhas2, int colunas2) {
     setlocale(LC_ALL, "pt-BR.UTF8");
     try {
-        if (linhas != 0 && linhas > 0) {
+        if ((linhas1 != 0 && linhas1 > 0) && (colunas1 != 0 && colunas1 > 0) && (linhas2 != 0 && linhas2 > 0) && (colunas2 != 0 && colunas2 > 0)) {
             return true;
         } else {
-            throw (linhas);
+            throw (linhas1);
         }
     }
     catch (...) {
@@ -140,10 +140,10 @@ void menu_operacoes_reais(int linhas, int colunas) {
     }
 }
 
-void menu_operacoes_matrizes(int linhas, int colunas) {
+void menu_operacoes_matrizes(int linhas1, int colunas1, int linhas2, int colunas2) {
     int tecla = 0;
-    Matriz matriz1(linhas, colunas);
-    Matriz matriz2(linhas, colunas);
+    Matriz matriz1(linhas1, colunas1);
+    Matriz matriz2(linhas2, colunas2);
     setlocale(LC_ALL, "pt-BR.UTF8");
     while (tecla != 5) {
         cout << "\n====== Operações entre matrizes ======";
@@ -157,7 +157,7 @@ void menu_operacoes_matrizes(int linhas, int colunas) {
         cin >> tecla;
         switch (tecla) {
             case 1:
-                if (matriz1.verificar_indices(matriz2)) {
+                if (matriz1.verificar_indices(matriz2) == 1) {
                     matriz1.set_auto();
                     cout << "\nMatriz A:" << endl;
                     matriz1.mostra_matriz();
@@ -173,7 +173,7 @@ void menu_operacoes_matrizes(int linhas, int colunas) {
                 }
                 break;
             case 2:
-                if (matriz1.verificar_indices(matriz2)) {
+                if (matriz1.verificar_indices(matriz2) == 1) {
                     matriz1.set_auto();
                     cout << "\nMatriz A:" << endl;
                     matriz1.mostra_matriz();
@@ -189,7 +189,7 @@ void menu_operacoes_matrizes(int linhas, int colunas) {
                 }
                 break;
             case 3:
-                if (matriz1.verificar_indices(matriz2)) {
+                if (matriz1.verificar_indices(matriz2, 1) == 1) {
                     matriz1.set_auto();
                     cout << "\nMatriz A:" << endl;
                     matriz1.mostra_matriz();
@@ -202,10 +202,7 @@ void menu_operacoes_matrizes(int linhas, int colunas) {
                     cout << "Matriz A * Matriz B: " << endl;
                     matriz1.mostra_matriz();
                     this_thread::sleep_for(chrono::seconds(2));
-                }
-                break;
-            case 4:
-                if (matriz1.verificar_indices(matriz2)) {
+                } else if (matriz1.verificar_indices(matriz2, 1) == 2) {
                     matriz1.set_auto();
                     cout << "\nMatriz A:" << endl;
                     matriz1.mostra_matriz();
@@ -214,14 +211,43 @@ void menu_operacoes_matrizes(int linhas, int colunas) {
                     cout << "Matriz B:" << endl;
                     matriz2.mostra_matriz();
                     this_thread::sleep_for(chrono::seconds(2));
-                    matriz1.dividir(matriz2);
-                    cout << "Matriz A / Matriz B: " << endl;
+                    Matriz matriz3 = matriz1.multiplicar(matriz2, 1);
+                    cout << "Matriz A * Matriz B: " << endl;
+                    matriz3.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                }
+                break;
+            case 4:
+                if (matriz1.verificar_indices(matriz2, 1) == 1) {
+                    matriz1.set_auto();
+                    cout << "\nMatriz A:" << endl;
                     matriz1.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz2.set_auto();
+                    cout << "Matriz B:" << endl;
+                    matriz2.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz1.multiplicar(matriz2);
+                    cout << "Matriz A * Matriz B: " << endl;
+                    matriz1.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                } else if (matriz1.verificar_indices(matriz2, 1) == 2) {
+                    matriz1.set_auto();
+                    cout << "\nMatriz A:" << endl;
+                    matriz1.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    matriz2.set_auto();
+                    cout << "Matriz B:" << endl;
+                    matriz2.mostra_matriz();
+                    this_thread::sleep_for(chrono::seconds(2));
+                    Matriz matriz3 = matriz1.dividir(matriz2, 1);
+                    cout << "Matriz A * Matriz B: " << endl;
+                    matriz3.mostra_matriz();
                     this_thread::sleep_for(chrono::seconds(2));
                 }
                 break;
             case 5:
-                exit(0);
+                main();
                 break;
             default:
                 cout << "\nErro de operação -> Opção inválida" << endl;
@@ -234,33 +260,46 @@ void menu_operacoes_matrizes(int linhas, int colunas) {
 int main()
 {
     int tecla = 0;
-    int linhas, colunas = 0;
+    int aux = 0;
+    int linhas1, colunas1, linhas2, colunas2 = 0;
     setlocale(LC_ALL, "pt-BR.UTF8");
-    while (tecla != 4) {
+    while (tecla != 5) {
         cout << "\n============ Interface ============";
-        cout << "\n[1] : Definir índices";
-        cout << "\n[2] : Operações com número reais";
-        cout << "\n[3] : Operações entre matrizes";
-        cout << "\n[4] : Encerrar";
+        cout << "\n[1] : Definir índices iguais";
+        cout << "\n[2] : Definir índices diferentes";
+        cout << "\n[3] : Operações com número reais";
+        cout << "\n[4] : Operações entre matrizes";
+        cout << "\n[5] : Encerrar";
         cout << "\n================================";
         cout << "\nEscolha: ";
         cin >> tecla;
         switch (tecla) {
             case 1:
-                linhas = get_linhas();
-                colunas = get_colunas();
+                linhas1 = get_linhas();
+                colunas1 = get_colunas();
+                linhas2, colunas2 = 1;
+                aux = 1;
                 break;
             case 2:
-                if (verificar_indices(linhas)) {
-                    menu_operacoes_reais(linhas, colunas);
-                }
+                linhas1 = get_linhas();
+                colunas1 = get_colunas();
+                linhas2 = get_linhas();
+                colunas2 = get_colunas();
+                aux = 2;
                 break;
             case 3:
-                if (verificar_indices(linhas)) {
-                    menu_operacoes_matrizes(linhas, colunas);
+                if (verificar_indices(linhas1, colunas2, linhas2, colunas2)) {
+                    menu_operacoes_reais(linhas1, colunas1);
                 }
                 break;
             case 4:
+                if (verificar_indices(linhas1, colunas2, linhas2, colunas2) && aux == 1) {
+                    menu_operacoes_matrizes(linhas1, colunas1, linhas1, colunas1);
+                } else if (verificar_indices(linhas1, colunas2, linhas2, colunas2) && aux == 2) {
+                    menu_operacoes_matrizes(linhas1, colunas1, linhas2, colunas2);
+                }
+                break;
+            case 5:
                 exit(0); 
                 break;
             default:
